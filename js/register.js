@@ -1,4 +1,6 @@
 const formRegister = document.getElementById("registerForm");
+const formObject = {};
+const campos = formRegister.querySelectorAll("[name]");
 const paragrafo = document.createElement("p");
 const mensagem = document.getElementById("mensagem");
 const nome = document.getElementById("nome");
@@ -17,6 +19,9 @@ function validaCampos() {
     paragrafo.innerText = "As senhas devem conferir";
     mensagem.appendChild(paragrafo);
   } else {
+    campos.forEach((campo) => {
+      formObject[campo.getAttribute("name")] = campo.value;
+    });
     paragrafo.innerText = "Cadastro Realizado com sucesso!";
     mensagem.appendChild(paragrafo);
     nome.value = "";
