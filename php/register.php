@@ -7,6 +7,7 @@ try {
     $name = $data['nome'];
     $email = $data['email'];
     $password = $data['senha'];
+    $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
     $checkstmt = $conn->prepare("SELECT email FROM user WHERE email = ?");
     $checkstmt->bindParam(1, $email);
@@ -19,7 +20,7 @@ try {
         $stmt = $conn->prepare("INSERT INTO user (name, email, password) VALUES (:name, :email, :password)");
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':password', $passwordHashed);
         $stmt->execute();
         echo 'Cadastro realizado com sucesso!';
     }
