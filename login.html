@@ -4,7 +4,8 @@
     <title>Escola RocketKids</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="./script.js"></script>
+    <script src="./js/login.js" type="module" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat" />
@@ -64,11 +65,19 @@
     <div class="w3-row-padding w3-padding-64 w3-container">
       <div class="w3-content">
         <div class="w3-twothird"></div>
-        <form action="loginservidor.php" method="post" class="w3-container">
+        <form id="formLogin" method="post" action="./php/login.php" class="w3-container">
           <p>Email:<input class="w3-input w3-border" type="email" name="email" /></p>
           <p>Senha: <input class="w3-input w3-border" type="password" name="senha" id="senha" /></p>
-          <p><input class="w3-button w3-white w3-border w3-border-red w3-round-large" type="submit" value="Login" /></p>
+          <p>
+            <input
+              class="w3-button w3-white w3-border w3-border-red w3-round-large"
+              type="button"
+              id="sbmtButton"
+              value="Login"
+            />
+          </p>
         </form>
+        <div id="mensagem"></div>
       </div>
     </div>
 
@@ -91,7 +100,6 @@
           x.className = x.className.replace(" w3-show", "");
         }
       }
-      getelement;
     </script>
   </body>
 </html>

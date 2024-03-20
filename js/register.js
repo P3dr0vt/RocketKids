@@ -21,9 +21,7 @@ function LimpaCampos() {
 }
 
 function criaMensagem(texto) {
-  const paragrafo = $("<p>").text(texto);
-  const mensagem = $("#mensagem");
-  mensagem.append(paragrafo);
+  $("#mensagem").text(texto);
 }
 
 function criaFormObjeto() {
