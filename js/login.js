@@ -10,9 +10,13 @@ function verificaCampos(bunda) {
   if (senha.val() === "" || email.val() === "") {
     $("#mensagem").text("Todos Campos Devem ser preenchidos!");
   } else {
-    $.post("./php/login.php", { email: email.val(), senha: senha.val() }, function (resposta) {
-      console.log("Resposta do servidor: " + resposta);
-      $("#mensagem").text(resposta);
+    $.post("./php/login.php", { email: email.val(), senha: senha.val() }, function (coquinho) {
+      var resposta = JSON.parse(coquinho);
+      if (resposta.status === "success") {
+        window.location.href = resposta.redirect;
+      } else {
+        $("#mensagem").text(resposta.message);
+      }
     });
   }
 }

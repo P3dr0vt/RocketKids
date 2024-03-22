@@ -1,36 +1,37 @@
 <?php
 include './connection.php';
 
-// Verifica se os dados foram enviados via POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $jsonUser = file_get_contents("php://input");
-    $data = json_decode($jsonUser, true);
-    $email = $data['email'];
-    $senha = $data['senha'];
+if (!isset($_REQUEST['email']) || !isset($_REQUEST['senha'])) {
+    $response = array('status' => 'error', 'message' => 'Campos não preenchidos corretamente');
+    echo json_encode($response);
+    exit;
+}
 
-    // Consulta o banco de dados para obter o usuário com o email fornecido
-    $stmt = $conn->prepare("SELECT email, password FROM user WHERE email = :email");
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
-    $emailExists = $stmt->fetch(PDO::FETCH_ASSOC);
+$email = $_REQUEST['email'];
+$password = $_REQUEST['senha'];
 
-    if ($emailExists) {
-        // Verifica se a senha fornecida corresponde ao hash de senha armazenado no banco de dados
-        if (password_verify($senha, $emailExists['password'])) {
-            session_start();
-            $_SESSION['email'] = $emailExists['email'];
-            // Retorna uma resposta para o cliente (ex: login realizado com sucesso)
-            echo 'Login realizado com sucesso!';
-        } else {
-            // Senha incorreta
-            echo 'Senha incorreta!';
-        }
+$user_consult = $conn->prepare("SELECT * FROM user WHERE email = :email");
+$user_consult->bindParam(":email", $email, PDO::PARAM_STR);
+$user_consult->execute();
+$user = $user_consult->fetch();
+
+if ($user) {
+    if (password_verify($password, $user["password"])) {
+        session_start();
+        $_SESSION['name'] = $user['name'];
+        $_SESSION['email'] = $user['email'];
+        $response = array('status' => 'success', 'redirect' => 'home.php');
+        echo json_encode($response);
+        exit;
     } else {
-        // Email não cadastrado
-        echo 'Email não cadastrado!';
+        $response = array('status' => 'error', 'message' => 'Senha incorreta!');
+        echo json_encode($response);
+        exit;
     }
 } else {
-    // Método de requisição inválido
-    echo 'Método de requisição inválido!';
+    $response = array('status' => 'error', 'message' => 'Usuário não cadastrado!');
+    echo json_encode($response);
+    exit;
 }
+
 ?>
